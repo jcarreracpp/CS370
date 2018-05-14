@@ -11,7 +11,23 @@ public class MPI_SampleProc extends MPI_Proc
     {
         MPI_Init(argc, argv);
         MPI_Status status = new MPI_Status();
-
+        
+        int data1[] = new int[1];
+        int data2[] = new int[1];
+        
+        int rank = MPI_Comm_rank(MPI_COMM_WORLD);
+        
+        if(rank > 0){
+            MPI_Recv(data2, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, status);
+            System.out.println("Processor "+rank+" has recieved "+data2[0]+"!");
+        }
+        
+        if(rank == 0){
+            data1[0] = 5;
+            MPI_Send(data1, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
+            System.out.println("Processor "+rank+" has sent "+data1[0]+" to 1!");
+        }
+        
         MPI_Finalize();
     }
 
